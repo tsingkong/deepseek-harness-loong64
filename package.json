@@ -306,5 +306,12 @@
     "@deepseek-ai/dsh-experimental-forge-github": "workspace:*",
     "@deepseek-ai/dsh-experimental-forge-session": "workspace:*",
     "@deepseek-ai/dsh-action-cards": "workspace:*"
+  },
+  "dependencies": {
+    "@oxlint/binding-linux-loong64-gnu": "loongnix:@oxlint/binding-linux-loong64-gnu@1.81.0",
+    "@rolldown/binding-linux-loong64-gnu": "loongnix:@rolldown/binding-linux-loong64-gnu@1.2.16",
+    "lefthook-linux-loong64": "loongnix:@loong64/lefthook-linux-loong64@2.1.10",
+    "lightningcss-linux-loong64-gnu": "loongnix:lightningcss-linux-loong64-gnu@1.33.0",
+    "node-addon-require-builtin-linux-loong64-gnu": "loongnix:node-addon-require-builtin-linux-loong64-gnu@0.1.9"
   }
 }
