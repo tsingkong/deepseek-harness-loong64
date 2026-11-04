@@ -102,10 +102,10 @@ describe('internal artifact build order', () => {
     buildLibraryArtifacts(root, hostOnly)
 
     const expected = [
-      ['exec', 'tsdown', '--config-loader', 'native', '--env.DSH_BUILD_FACE', 'host'],
+      ['exec', 'tsdown', '--config-loader', 'tsx', '--env.DSH_BUILD_FACE', 'host'],
       ...hostOnly ? [] : [
         ['--filter', '@deepseek-ai/dsh-desktop', 'run', 'bundle'],
-        ['exec', 'tsdown', '--config-loader', 'native', '--env.DSH_BUILD_FACE', 'client'],
+        ['exec', 'tsdown', '--config-loader', 'tsx', '--env.DSH_BUILD_FACE', 'client'],
       ],
     ]
     expect(commands()).toEqual(expected.map(args => ({ args, title: 'Inherited Build Title' })))
@@ -132,7 +132,7 @@ describe('internal artifact build order', () => {
 
     expect(readFileSync(join(consumer, 'lib/types/index.js'), 'utf8')).toContain('TYPERT')
     expect(commands().map(command => command.args)).toEqual([
-      ['exec', 'tsdown', '--config-loader', 'native', '--env.DSH_BUILD_FACE', 'host'],
+      ['exec', 'tsdown', '--config-loader', 'tsx', '--env.DSH_BUILD_FACE', 'host'],
     ])
   })
 
@@ -153,10 +153,10 @@ describe('internal artifact build order', () => {
 
     expect(commands()).toEqual([
       ['run', 'build:native-system'],
-      ['exec', 'tsdown', '--config-loader', 'native', '--env.DSH_BUILD_FACE', 'host'],
+      ['exec', 'tsdown', '--config-loader', 'tsx', '--env.DSH_BUILD_FACE', 'host'],
       ['--filter', '@deepseek-ai/dsh-desktop', 'run', 'bundle'],
-      ['exec', 'tsdown', '--config-loader', 'native', '--env.DSH_BUILD_FACE', 'client'],
-      ['exec', 'tsdown', '--config-loader', 'native', '--config', 'benchmarks/tsdown.config.ts'],
+      ['exec', 'tsdown', '--config-loader', 'tsx', '--env.DSH_BUILD_FACE', 'client'],
+      ['exec', 'tsdown', '--config-loader', 'tsx', '--config', 'benchmarks/tsdown.config.ts'],
       ['run', 'build:web'],
       ['run', 'test:bench:built'],
     ].map(args => ({ args, title: 'Inherited Build Title' })))
