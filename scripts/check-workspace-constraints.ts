@@ -55,6 +55,7 @@ const publicNativePackages = new Set([
   '@deepseek-ai/node-addon-system-darwin-arm64',
   '@deepseek-ai/node-addon-system-darwin-x64',
   '@deepseek-ai/node-addon-system-linux-arm64',
+  '@deepseek-ai/node-addon-system-linux-loong64',
   '@deepseek-ai/node-addon-system-linux-x64',
 ])
 /** Deliberate source payloads whose exact bytes are part of the package's audit surface. */
