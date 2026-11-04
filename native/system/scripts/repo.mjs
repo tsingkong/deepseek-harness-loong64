@@ -15,7 +15,7 @@ export const root = fileURLToPath(new URL('..', import.meta.url));
 const packagesRoot = path.join(root, 'packages');
 
 /** ELF `e_machine` (offset 18, little-endian) per platform-package `cpu` value. */
-const E_MACHINE = { x64: 62, arm64: 183 };
+const E_MACHINE = { x64: 62, arm64: 183, loong64: 258 };
 
 export function readJson(file) {
   return JSON.parse(fs.readFileSync(file, 'utf8'));

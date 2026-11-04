@@ -14,6 +14,14 @@ packages:
   # closure is what the exe bundles and what the Python runtime distributes.
   - python/sdk-runtime
 
+# The LoongArch64 native bindings are published to the Loongnix registry and are
+# absent from the default registry, so they cannot be resolved by scope routing.
+# Declaring a named registry prefix lets exactly these packages opt into Loongnix
+# while every other dependency keeps using the default registry.
+registries:
+  https://registry.loongnix.cn:5873/:
+    prefix: loongnix
+
 overrides:
   'extract-zip>yauzl': '3.4.0'
   '@deepseek-ai/cosmokit': 'link:vendor/cosmokit'
