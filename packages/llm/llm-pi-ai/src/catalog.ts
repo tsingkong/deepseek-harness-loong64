@@ -254,6 +254,8 @@ const COMPLETIONS_COMPAT_GATE = {
   maxTokensField: 'offer',
   requiresToolResultName: 'offer',
   requiresAssistantAfterToolResult: 'offer',
+  requiresNonNullAssistantContent: 'withhold',
+  requiresToolsWithToolHistory: 'withhold',
   requiresThinkingAsText: 'offer',
   requiresReasoningContentOnAssistantMessages: 'offer',
   thinkingFormat: 'offer',
@@ -273,6 +275,7 @@ const COMPLETIONS_COMPAT_GATE = {
   supportsMidConvoSystemMessages: 'withhold',
   supportsMidConvoToolAdditions: 'withhold',
   sessionAffinityFormat: 'withhold',
+  promptCacheKeyMode: 'withhold',
 } as const satisfies Record<keyof OpenAICompletionsCompat, CompatDisposition>
 
 /** Disposition of every `OpenAIResponsesCompat` field; a drift gate like the one above. */
@@ -282,6 +285,7 @@ const RESPONSES_COMPAT_GATE = {
   supportsStrictMode: 'offer',
   supportsLongCacheRetention: 'offer',
   sessionAffinityFormat: 'withhold',
+  promptCacheKeyMode: 'withhold',
   supportsOpenAIGrammarTools: 'withhold',
   supportsAdditionalTools: 'withhold',
   supportsToolSearch: 'withhold',
@@ -303,6 +307,7 @@ const ANTHROPIC_COMPAT_GATE = {
   sessionAffinityFormat: 'withhold',
   supportsMidConvoSystemMessages: 'withhold',
   supportsMidConvoToolChanges: 'withhold',
+  supportsMessageThreads: 'withhold',
   supportsMidConvoEffort: 'withhold',
   allowedFallbackModels: 'withhold',
 } as const satisfies Record<keyof AnthropicMessagesCompat, CompatDisposition>
@@ -483,6 +488,16 @@ type AssertTrue<T extends true> = T
 type UpstreamCompat = OpenAICompletionsCompat & OpenAIResponsesCompat & AnthropicMessagesCompat & BedrockCompat & MistralConversationsCompat
 
 /**
+ * One compat profile with optionality and `undefined` removed from every field,
+ * so a type comparison reads the field types themselves. pi-ai's compat fields
+ * are optional and carry an explicit `undefined`; under
+ * `exactOptionalPropertyTypes` that makes `Partial` of them wider than this
+ * package's own optional fields, so comparing the two as-is fails for every
+ * field regardless of the types being compared.
+ */
+type DefinedCompatFields<T> = { [K in keyof T]-?: Exclude<T[K], undefined> }
+
+/**
  * Proof that each documented field carries its upstream type, not a hand-copied
  * restatement of it. The name gates above pin *which* fields exist; this pins
  * their types, in both directions because each catches a different drift. A
@@ -492,8 +507,10 @@ type UpstreamCompat = OpenAICompletionsCompat & OpenAIResponsesCompat & Anthropi
  * union would otherwise leave configuration silently behind.
  */
 export type EveryProfileFieldMatchesUpstream = AssertTrue<
-  PiAiCompatProfile extends Partial<Pick<UpstreamCompat, OfferedCompatField>>
-    ? Partial<Pick<UpstreamCompat, OfferedCompatField>> extends PiAiCompatProfile ? true : false
+  DefinedCompatFields<PiAiCompatProfile> extends DefinedCompatFields<Partial<Pick<UpstreamCompat, OfferedCompatField>>>
+    ? DefinedCompatFields<Partial<Pick<UpstreamCompat, OfferedCompatField>>> extends DefinedCompatFields<PiAiCompatProfile>
+      ? true
+      : false
     : false
 >
 

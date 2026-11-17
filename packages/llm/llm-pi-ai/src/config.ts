@@ -273,7 +273,7 @@ const thinkingBudgets = z.object({
  * thinking state, which makes a template-driven gateway configurable without
  * restating its template.
  */
-const chatTemplateKwarg: z<ChatTemplateKwargValue> = z.union([
+const chatTemplateKwarg = z.union([
   z.string(),
   z.number(),
   z.boolean(),
@@ -282,7 +282,7 @@ const chatTemplateKwarg: z<ChatTemplateKwargValue> = z.union([
     $var: z.union(CHAT_TEMPLATE_VARS).required(),
     omitWhenOff: z.boolean(),
   }),
-])
+]) as z<ChatTemplateKwargValue>
 
 const compatProfile: z<PiAiCompatProfile> = z.object({
   supportsStore: z.boolean(),
